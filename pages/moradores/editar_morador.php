@@ -6,6 +6,7 @@
     <title>Editar Morador - ShieldTech</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/validation.css">
+    <link rel="stylesheet" href="../../css/cpf-validation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -98,7 +99,11 @@
 
                     <div class="form-group">
                         <label for="cpf">CPF:</label>
-                        <input type="text" id="cpf" name="cpf" value="<?= $campo["cpf"] ?>" required>
+                        <div class="cpf-validation">
+                            <input type="text" id="cpf" name="cpf" value="<?= $campo["cpf"] ?>" required>
+                            <span class="validation-icon" id="cpf-icon"></span>
+                        </div>
+                        <div class="cpf-error" id="cpf-error"></div>
                     </div>
                 </div>
 
@@ -192,13 +197,14 @@
     </footer>
 
     <script src="../../js/validation.js"></script>
+    <script src="../../js/cpf-validator.js"></script>
     <script>
         // Configurar validação de email para edição
         document.addEventListener('DOMContentLoaded', () => {
             const moradorId = <?= $campo["id_moradores"] ?>;
             
-            // Configurar validação excluindo o ID atual
             EmailValidator.setupEmailValidation('email', 'email-error');
+            CPFValidator.setupCompleteValidation('cpf', 'cpf-error', 'moradores', moradorId);
             
             // Verificação adicional para email duplicado
             const emailInput = document.getElementById('email');

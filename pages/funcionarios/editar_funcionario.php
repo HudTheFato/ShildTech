@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Funcionário - ShieldTech</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/cpf-validation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -84,7 +85,11 @@
 
                     <div class="form-group">
                         <label for="cpf">CPF:</label>
-                        <input type="text" id="cpf" name="cpf" value="<?= $campo["cpf"] ?>" required>
+                       <div class="cpf-validation">
+                           <input type="text" id="cpf" name="cpf" value="<?= $campo["cpf"] ?>" required>
+                           <span class="validation-icon" id="cpf-icon"></span>
+                       </div>
+                       <div class="cpf-error" id="cpf-error"></div>
                     </div>
                 </div>
 
@@ -169,5 +174,14 @@
     <footer>
         <p>&copy; 2025 ShieldTech. Todos os direitos reservados.</p>
     </footer>
+    
+    <script src="../../js/cpf-validator.js"></script>
+    <script>
+        // Configurar validação de CPF para edição
+        document.addEventListener('DOMContentLoaded', () => {
+            const funcionarioId = <?= $campo["id_funcionarios"] ?>;
+            CPFValidator.setupCompleteValidation('cpf', 'cpf-error', 'funcionarios', funcionarioId);
+        });
+    </script>
 </body>
 </html>

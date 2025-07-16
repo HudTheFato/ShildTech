@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Visitante - ShieldTech</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/cpf-validation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -78,7 +79,11 @@
 
                     <div class="form-group">
                         <label for="num_documento">Número do Documento:</label>
-                        <input type="text" id="num_documento" name="num_documento" value="<?= $campo["num_documento"] ?>" required>
+                       <div class="cpf-validation">
+                           <input type="text" id="num_documento" name="num_documento" value="<?= $campo["num_documento"] ?>" required>
+                           <span class="validation-icon" id="cpf-icon"></span>
+                       </div>
+                       <div class="cpf-error" id="cpf-error"></div>
                     </div>
                 </div>
 
@@ -121,5 +126,14 @@
     <footer>
         <p>&copy; 2025 ShieldTech. Todos os direitos reservados.</p>
     </footer>
+    
+    <script src="../../js/cpf-validator.js"></script>
+    <script>
+        // Configurar validação de CPF para edição de visitante
+        document.addEventListener('DOMContentLoaded', () => {
+            const visitanteId = <?= $campo["id_visitantes"] ?>;
+            CPFValidator.setupCompleteValidation('num_documento', 'cpf-error', 'visitantes', visitanteId);
+        });
+    </script>
 </body>
 </html>

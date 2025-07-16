@@ -13,6 +13,9 @@ if (!$conn) {
 // Configurar charset para UTF-8
 mysqli_set_charset($conn, "utf8");
 
+// Incluir validador de CPF
+include_once("php/cpf-validator.php");
+
 // Verificar e criar colunas necessárias se não existirem
 $check_reservas = mysqli_query($conn, "SHOW COLUMNS FROM tb_reservas LIKE 'id_morador'");
 if (mysqli_num_rows($check_reservas) == 0) {

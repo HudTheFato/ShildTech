@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Funcionários - ShieldTech</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/cpf-validation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -72,7 +73,11 @@
 
                     <div class="form-group">
                         <label for="cpf">CPF:</label>
-                        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                        <div class="cpf-validation">
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                            <span class="validation-icon" id="cpf-icon"></span>
+                        </div>
+                        <div class="cpf-error" id="cpf-error"></div>
                     </div>
                 </div>
 
@@ -157,16 +162,8 @@
         <p>&copy; 2025 ShieldTech. Todos os direitos reservados.</p>
     </footer>
 
+    <script src="../../js/cpf-validator.js"></script>
     <script>
-        // Máscara para CPF
-        document.getElementById('cpf').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
-                e.target.value = value;
-            }
-        });
-
         // Máscara para telefone
         document.getElementById('telefone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
@@ -174,6 +171,11 @@
                 value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
                 e.target.value = value;
             }
+        });
+        
+        // Configurar validação de CPF
+        document.addEventListener('DOMContentLoaded', () => {
+            CPFValidator.setupCompleteValidation('cpf', 'cpf-error', 'funcionarios');
         });
     </script>
 </body>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Visitantes - ShieldTech</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/cpf-validation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -67,7 +68,12 @@
 
                     <div class="form-group">
                         <label for="num_documento">Número do Documento:</label>
-                        <input type="text" id="num_documento" name="num_documento" placeholder="CPF ou RG" required>
+                       <div class="cpf-validation">
+                           <input type="text" id="num_documento" name="num_documento" placeholder="CPF" required>
+                           <span class="validation-icon" id="cpf-icon"></span>
+                       </div>
+                       <div class="cpf-error" id="cpf-error"></div>
+                       <small style="color: #666;">Digite apenas o CPF (sem RG)</small>
                     </div>
                 </div>
 
@@ -159,7 +165,13 @@
         <p>&copy; 2025 ShieldTech. Todos os direitos reservados.</p>
     </footer>
 
+    <script src="../../js/cpf-validator.js"></script>
     <script>
+        // Configurar validação de CPF para visitantes
+        document.addEventListener('DOMContentLoaded', () => {
+            CPFValidator.setupCompleteValidation('num_documento', 'cpf-error', 'visitantes');
+        });
+        
         // Máscara para telefone
         document.getElementById('telefone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');

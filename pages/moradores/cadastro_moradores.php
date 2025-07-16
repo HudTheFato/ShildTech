@@ -6,6 +6,7 @@
     <title>Cadastro de Moradores - ShieldTech</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/validation.css">
+    <link rel="stylesheet" href="../../css/cpf-validation.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -79,7 +80,21 @@
 
                         <div class="form-group">
                             <label for="cpf">CPF:</label>
-                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                            <div class="cpf-validation">
+                                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                                <span class="validation-icon" id="cpf-icon"></span>
+                            </div>
+                            <div class="cpf-error" id="cpf-error"></div>
+                            <div class="cpf-tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">
+                                    Digite um CPF válido. O sistema verificará:<br>
+                                    • Formato correto (11 dígitos)<br>
+                                    • Dígitos verificadores válidos<br>
+                                    • Se já não está cadastrado<br>
+                                    Exemplo: 123.456.789-00
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -226,16 +241,8 @@
     </footer>
 
     <script src="../../js/validation.js"></script>
+    <script src="../../js/cpf-validator.js"></script>
     <script>
-        // Máscara para CPF
-        document.getElementById('cpf').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
-                e.target.value = value;
-            }
-        });
-
         // Máscara para telefone
         document.getElementById('telefone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
@@ -248,35 +255,7 @@
         // Configurar validação de email em tempo real
         document.addEventListener('DOMContentLoaded', () => {
             EmailValidator.setupEmailValidation('email', 'email-error');
-            
-            // Adicionar ícone de validação
-            const emailInput = document.getElementById('email');
-            const emailIcon = document.getElementById('email-icon');
-            
-            emailInput.addEventListener('input', () => {
-                emailIcon.innerHTML = '<div class="email-loading"></div>';
-            });
-            
-            // Atualizar ícone baseado na validação
-            const originalSetup = EmailValidator.setupEmailValidation;
-            EmailValidator.setupEmailValidation = function(inputId, errorElementId) {
-                originalSetup.call(this, inputId, errorElementId);
-                
-                const input = document.getElementById(inputId);
-                const icon = document.getElementById('email-icon');
-                
-                input.addEventListener('input', () => {
-                    setTimeout(() => {
-                        if (input.classList.contains('valid')) {
-                            icon.innerHTML = '<i class="fas fa-check-circle valid"></i>';
-                        } else if (input.classList.contains('invalid')) {
-                            icon.innerHTML = '<i class="fas fa-times-circle invalid"></i>';
-                        } else {
-                            icon.innerHTML = '';
-                        }
-                    }, 600);
-                });
-            };
+            CPFValidator.setupCompleteValidation('cpf', 'cpf-error', 'moradores');
         });
     </script>
 </body>
