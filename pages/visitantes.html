@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitantes - ShieldTech</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    <header>
+    <nav>
+      <div class="logo">
+        <h1><i class="fas fa-shield"></i> ShieldTech</h1>
+      </div>
+      <ul class="menu">
+        <li><a href="../index.html"><i class="fas fa-home"></i> Início</a></li>
+        <li><a href="visitantes.html"><i class="fas fa-user-friends"></i> Visitantes</a></li>
+        <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn"><i class="fas fa-gear"></i> Cadastros</a>
+          <div class="dropdown-content">
+            <a href="cadastro_moradores.html">Moradores</a>
+            <a href="cadastro_funcionarios.html">Funcionários</a>
+            <a href="cadastro_cargos.html">Cargos</a>
+          </div>
+        </li>
+      </ul>
+      <button class="menu-toggle" style="display: none;">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+  </header>
+
+    <main>
+        <h2>Controle de Visitantes</h2>
+        
+        <section class="form-section">
+            <h3>Registro de Visitante</h3>
+            <form method="post" action="">
+                <div class="form-group">
+                    <label for="nome-visitante">Nome do Visitante:</label>
+                    <input type="text" id="nome-visitante" name="nome-visitante" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="documento">Documento (CPF):</label>
+                    <input type="text" id="documento" name="documento" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="text" id="telefone" name="telefone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="foto">Foto:</label>
+                    <input type="text" id="foto" name="foto" required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="data_nasc">Data de nascimento:</label>
+                    <input type="text" id="data_nasc" name="data_nasc" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="morador-visita">Morador a ser visitado:</label>
+                    <select id="morador-visita" name="morador-visita" required>
+                        <option value="">Selecione um morador</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo">Motivo da visita:</label>
+                    <input type="text" id="motivo" name="motivo" required>
+                </div>
+
+               
+            </form>
+            <button type="submit">Registrar Entrada</button>
+        </section>
+
+        <section class="lista-section">
+            <h3>Visitantes Presentes</h3>
+            <div id="lista-visitantes"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ShieldTech - Sistema de Controle de Acesso</p>
+    </footer>
+
+    <script src="../js/visitantes.js"></script>
+</body>
+</html> 
