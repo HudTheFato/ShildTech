@@ -258,6 +258,63 @@
             EmailValidator.setupEmailValidation('email', 'email-error');
             CPFValidator.setupCompleteValidation('cpf', 'cpf-error', 'moradores');
         });
+        
+        // Função para mostrar/ocultar formulário de animal
+        function toggleAnimalForm() {
+            const temAnimal = document.getElementById('tem_animal').value;
+            const animalForm = document.getElementById('animal-form');
+            const animalInputs = animalForm.querySelectorAll('input, select, textarea');
+            
+            if (temAnimal === 'sim') {
+                animalForm.style.display = 'block';
+                animalForm.style.animation = 'fadeIn 0.3s ease-in';
+                // Tornar campos obrigatórios
+                document.getElementById('animal_nome').required = true;
+                document.getElementById('animal_tipo').required = true;
+            } else {
+                animalForm.style.display = 'none';
+                // Limpar campos e remover obrigatoriedade
+                animalInputs.forEach(input => {
+                    input.value = '';
+                    input.required = false;
+                });
+            }
+        }
+        
+        // Função para mostrar/ocultar formulário de veículo
+        function toggleVeiculoForm() {
+            const temVeiculo = document.getElementById('tem_veiculo').value;
+            const veiculoForm = document.getElementById('veiculo-form');
+            const veiculoInputs = veiculoForm.querySelectorAll('input, select');
+            
+            if (temVeiculo === 'sim') {
+                veiculoForm.style.display = 'block';
+                veiculoForm.style.animation = 'fadeIn 0.3s ease-in';
+                // Tornar campos obrigatórios
+                document.getElementById('veiculo_marca').required = true;
+                document.getElementById('veiculo_modelo').required = true;
+                document.getElementById('veiculo_placa').required = true;
+            } else {
+                veiculoForm.style.display = 'none';
+                // Limpar campos e remover obrigatoriedade
+                veiculoInputs.forEach(input => {
+                    input.value = '';
+                    input.required = false;
+                });
+            }
+        }
+        
+        // Máscara para placa do veículo
+        document.getElementById('veiculo_placa').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            if (value.length <= 7) {
+                // Formato antigo: ABC-1234
+                if (value.length > 3) {
+                    value = value.replace(/^([A-Z]{3})(\d{1,4}).*/, '$1-$2');
+                }
+                e.target.value = value;
+            }
+        });
     </script>
 </body>
 </html>

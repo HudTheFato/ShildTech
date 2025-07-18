@@ -1014,6 +1014,40 @@ footer {
     }
 }
 
+/* Animação para formulários expansíveis */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para seções de formulário expansível */
+#animal-form, #veiculo-form {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+#animal-form h4, #veiculo-form h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+#animal-form h4 i, #veiculo-form h4 i {
+    font-size: 1.3rem;
+}
+
 .card, .lista-item, .form-section, .quick-access-card {
     animation: fadeIn 0.5s ease-out;
 }
