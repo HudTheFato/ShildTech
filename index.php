@@ -21,6 +21,7 @@
                 <li><a href="index.php"><i class="fas fa-home"></i> Início</a></li>
                 <li><a href="pages/visitantes/visitantes.php"><i class="fas fa-user-friends"></i> Visitantes</a></li>
                 <li><a href="pages/relatorios/relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="pages/reservas/reservas.php"><i class="fas fa-calendar"></i> Reservas</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn"><i class="fas fa-gear"></i> Cadastros</a>
                     <div class="dropdown-content">
@@ -28,7 +29,6 @@
                         <a href="pages/funcionarios/cadastro_funcionarios.php">Funcionários</a>
                         <a href="pages/cargos/cadastro_cargos.php">Cargos</a>
                         <a href="pages/animais/cadastro_animais.php">Animais</a>
-                        <a href="pages/reservas/reservas.php">Reservas</a>
                     </div>
                 </li>
             </ul>

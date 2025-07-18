@@ -43,7 +43,7 @@
     }
     ?>
 
-    <header>
+<header>
         <nav>
             <div class="logo">
                 <h1><i class="fas fa-shield"></i> ShieldTech</h1>
@@ -52,6 +52,7 @@
                 <li><a href="../../index.php"><i class="fas fa-home"></i> Início</a></li>
                 <li><a href="../visitantes/visitantes.php"><i class="fas fa-user-friends"></i> Visitantes</a></li>
                 <li><a href="../relatorios/relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="../reservas/reservas.php"><i class="fas fa-calendar"></i> Reservas</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn"><i class="fas fa-gear"></i> Cadastros</a>
                     <div class="dropdown-content">

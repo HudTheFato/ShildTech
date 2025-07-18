@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
+<header>
         <nav>
             <div class="logo">
                 <h1><i class="fas fa-shield"></i> ShieldTech</h1>
@@ -17,13 +17,14 @@
                 <li><a href="../../index.php"><i class="fas fa-home"></i> Início</a></li>
                 <li><a href="../visitantes/visitantes.php"><i class="fas fa-user-friends"></i> Visitantes</a></li>
                 <li><a href="../relatorios/relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="../reservas/reservas.php"><i class="fas fa-calendar"></i> Reservas</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn"><i class="fas fa-gear"></i> Cadastros</a>
                     <div class="dropdown-content">
-                        <a href="../moradores/cadastro_moradores.php">Moradores</a>
-                        <a href="cadastro_funcionarios.php">Funcionários</a>
+                        <a href="cadastro_moradores.php">Moradores</a>
+                        <a href="../funcionarios/cadastro_funcionarios.php">Funcionários</a>
                         <a href="../cargos/cadastro_cargos.php">Cargos</a>
-                        <a href="../animais/cadastro_animais.php">Animais</a>                    
+                        <a href="../animais/cadastro_animais.php">Animais</a>
                     </div>
                 </li>
             </ul>
