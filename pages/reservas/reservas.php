@@ -11,76 +11,9 @@
     <?php
     include("../../conectarbd.php");
     
-    // Função para enviar email de confirmação
-    function enviarEmailConfirmacao($email_morador, $nome_morador, $local, $data, $horario, $tempo_duracao, $descricao) {
-        $assunto = "Confirmação de Reserva - ShieldTech";
-        $data_formatada = date('d/m/Y', strtotime($data));
-        
-        $mensagem = "
-        <html>
-        <head>
-            <title>Confirmação de Reserva</title>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
-                .content { padding: 20px; background: #f9f9f9; }
-                .details { background: white; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db; }
-                .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    <h1>🛡️ ShieldTech</h1>
-                    <h2>Confirmação de Reserva</h2>
-                </div>
-                <div class='content'>
-                    <p>Olá <strong>$nome_morador</strong>,</p>
-                    <p>Sua reserva foi confirmada com sucesso!</p>
-                    
-                    <div class='details'>
-                        <h3>📋 Detalhes da Reserva:</h3>
-                        <p><strong>📍 Local:</strong> $local</p>
-                        <p><strong>📅 Data:</strong> $data_formatada</p>
-                        <p><strong>🕐 Horário:</strong> $horario</p>
-                        <p><strong>⏱️ Duração:</strong> $tempo_duracao</p>
-                        " . ($descricao ? "<p><strong>📝 Observações:</strong> $descricao</p>" : "") . "
-                    </div>
-                    
-                    <div class='details'>
-                        <h3>📋 Lembrete Importante:</h3>
-                        <ul>
-                            <li>Chegue no horário marcado</li>
-                            <li>Deixe o local limpo após o uso</li>
-                            <li>Em caso de cancelamento, avise com antecedência</li>
-                            <li>Dúvidas? Entre em contato conosco</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class='footer'>
-                    <p>Este é um email automático, não responda.</p>
-                    <p>© 2025 ShieldTech - Sistema de Controle de Acesso</p>
-                </div>
-            </div>
-        </body>
-        </html>
-        ";
-        
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= "From: ShieldTech <noreply@shieldtech.com>" . "\r\n";
-        $headers .= "Reply-To: contato@shieldtech.com" . "\r\n";
-        
-        // Tentar enviar o email
-        if (mail($email_morador, $assunto, $mensagem, $headers)) {
-            return true;
-        } else {
-            // Log do erro para debug
-            error_log("Erro ao enviar email para: $email_morador");
-            return false;
-        }
-    }
+    // Incluir classes de email
+    require_once("../../php/email-sender.php");
+    require_once("../../php/email-template.php");
     
     // Processar formulário se foi enviado
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -102,31 +35,39 @@
             
             if (mysqli_query($conn, $sql)) {
                 // Buscar dados do morador para enviar email
-                $morador_query = mysqli_query($conn, "SELECT nome, email FROM tb_moradores WHERE id_moradores = $id_morador");
+                $morador_query = mysqli_query($conn, "SELECT nome, email, bloco, torre FROM tb_moradores WHERE id_moradores = $id_morador");
                 $morador = mysqli_fetch_array($morador_query);
                 
                 $email_enviado = false;
                 if ($morador && $morador['email']) {
-                    $nome_morador = $morador['nome'];
-                    $email_morador = $morador['email'];
+                    // Preparar dados para o email
+                    $reservaData = [
+                        'local' => $local,
+                        'data' => $data,
+                        'horario' => $horario,
+                        'tempo_duracao' => $tempo_duracao,
+                        'descricao' => $descricao
+                    ];
+                    
+                    $moradorData = [
+                        'nome' => $morador['nome'],
+                        'email' => $morador['email'],
+                        'bloco' => $morador['bloco'],
+                        'torre' => $morador['torre']
+                    ];
+                    
+                    // Criar instância do EmailSender
+                    $emailSender = new EmailSender(false); // false = usar mail() nativo
                     
                     // Enviar email de confirmação
-                    $email_enviado = enviarEmailConfirmacao(
-                        $email_morador, 
-                        $nome_morador, 
-                        $local, 
-                        $data, 
-                        $horario, 
-                        $tempo_duracao, 
-                        $descricao
-                    );
+                    $email_enviado = $emailSender->sendReservaConfirmation($reservaData, $moradorData);
                 }
                 
                 if ($email_enviado) {
                     echo "<script>alert('Reserva realizada com sucesso! Email de confirmação enviado para " . $morador['email'] . "');</script>";
                 } else {
                     if ($morador && $morador['email']) {
-                        echo "<script>alert('Reserva realizada com sucesso! Porém houve um problema ao enviar o email de confirmação.');</script>";
+                        echo "<script>alert('Reserva realizada com sucesso! Porém houve um problema ao enviar o email de confirmação. Verifique as configurações de email.');</script>";
                     } else {
                         echo "<script>alert('Reserva realizada com sucesso! Email não cadastrado para este morador.');</script>";
                     }
@@ -311,11 +252,27 @@
                 </div>
 
                 <div class="quick-actions">
-                    <h4>Status do Email</h4>
+                    <h4>Sistema de Email</h4>
                     <div style="background: #e8f4fd; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 4px solid #3498db;">
-                        <p style="margin: 0; color: #2c3e50; font-size: 0.9em;">
-                            <i class="fas fa-info-circle"></i> 
+                        <?php
+                        // Verificar status do sistema de email
+                        $emailConfig = EmailConfig::getConfig();
+                        $isConfigured = EmailConfig::isSmtpConfigured();
+                        ?>
+                        <p style="margin: 0 0 0.5rem 0; color: #2c3e50; font-size: 0.9em;">
+                            <i class="fas fa-envelope"></i> 
+                            <strong>Status:</strong> 
+                            <?php if ($isConfigured): ?>
+                                <span style="color: #28a745;">✅ Configurado (SMTP)</span>
+                            <?php else: ?>
+                                <span style="color: #ffc107;">⚠️ Usando mail() nativo</span>
+                            <?php endif; ?>
+                        </p>
+                        <p style="margin: 0; color: #666; font-size: 0.8em;">
                             Emails de confirmação são enviados automaticamente para moradores com email cadastrado.
+                            <?php if (!$isConfigured): ?>
+                                <br><small>Para melhor confiabilidade, configure SMTP em php/email-config.php</small>
+                            <?php endif; ?>
                         </p>
                     </div>
                 </div>
