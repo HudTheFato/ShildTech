@@ -1,9 +1,8 @@
 <?php
 include("../../conectarbd.php");
 
-// Incluir classes de email
-require_once("../../php/email-sender.php");
-require_once("../../php/email-template.php");
+// Incluir classes de email (Outlook local)
+require_once("../../php/outlook-email-sender.php");
 
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -37,8 +36,18 @@ if ($id) {
                 'torre' => $reserva_data['torre']
             ];
             
-            $emailSender = new EmailSender(false);
-            $emailSender->sendReservaCancelamento($reservaData, $moradorData);
+            $emailSender = new OutlookEmailSender();
+            $result = $emailSender->sendReservaCancelamento($reservaData, $moradorData);
+            
+            // Se criou arquivo .eml, mostrar link para download
+            if ($result['success'] && isset($result['download_url'])) {
+                echo "<script>
+                    alert('Reserva cancelada! Arquivo de email de cancelamento criado.');
+                    window.open('" . $result['download_url'] . "', '_blank');
+                    window.location = 'consultar_reservas.php';
+                </script>";
+                exit;
+            }
         }
         
         echo "<script>alert('Reserva cancelada com sucesso!'); window.location = 'consultar_reservas.php';</script>";

@@ -11,9 +11,8 @@
     <?php
     include("../../conectarbd.php");
     
-    // Incluir classes de email
-    require_once("../../php/email-sender.php");
-    require_once("../../php/email-template.php");
+    // Incluir classes de email (Outlook local)
+    require_once("../../php/outlook-email-sender.php");
     
     // Processar formulário se foi enviado
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -56,18 +55,26 @@
                         'torre' => $morador['torre']
                     ];
                     
-                    // Criar instância do EmailSender
-                    $emailSender = new EmailSender(false); // false = usar mail() nativo
+                    // Criar instância do OutlookEmailSender
+                    $emailSender = new OutlookEmailSender();
                     
                     // Enviar email de confirmação
-                    $email_enviado = $emailSender->sendReservaConfirmation($reservaData, $moradorData);
+                    $result = $emailSender->sendReservaConfirmation($reservaData, $moradorData);
+                    $email_enviado = $result['success'];
                 }
                 
                 if ($email_enviado) {
-                    echo "<script>alert('Reserva realizada com sucesso! Email de confirmação enviado para " . $morador['email'] . "');</script>";
+                    if (isset($result['download_url'])) {
+                        echo "<script>
+                            alert('Reserva realizada com sucesso! Arquivo de email criado.');
+                            window.open('" . $result['download_url'] . "', '_blank');
+                        </script>";
+                    } else {
+                        echo "<script>alert('Reserva realizada com sucesso! Email enviado via Outlook.');</script>";
+                    }
                 } else {
                     if ($morador && $morador['email']) {
-                        echo "<script>alert('Reserva realizada com sucesso! Porém houve um problema ao enviar o email de confirmação. Verifique as configurações de email.');</script>";
+                        echo "<script>alert('Reserva realizada com sucesso! Porém houve um problema ao criar o email de confirmação.');</script>";
                     } else {
                         echo "<script>alert('Reserva realizada com sucesso! Email não cadastrado para este morador.');</script>";
                     }
@@ -252,27 +259,27 @@
                 </div>
 
                 <div class="quick-actions">
-                    <h4>Sistema de Email</h4>
+                    <h4>Sistema de Email Outlook</h4>
                     <div style="background: #e8f4fd; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; border-left: 4px solid #3498db;">
-                        <?php
-                        // Verificar status do sistema de email
-                        $emailConfig = EmailConfig::getConfig();
-                        $isConfigured = EmailConfig::isSmtpConfigured();
-                        ?>
                         <p style="margin: 0 0 0.5rem 0; color: #2c3e50; font-size: 0.9em;">
                             <i class="fas fa-envelope"></i> 
                             <strong>Status:</strong> 
-                            <?php if ($isConfigured): ?>
-                                <span style="color: #28a745;">✅ Configurado (SMTP)</span>
+                            <?php if (PHP_OS_FAMILY === 'Windows' && class_exists('COM')): ?>
+                                <span style="color: #28a745;">✅ Outlook COM Disponível</span>
                             <?php else: ?>
-                                <span style="color: #ffc107;">⚠️ Usando mail() nativo</span>
+                                <span style="color: #17a2b8;">ℹ️ Usando arquivos .eml</span>
                             <?php endif; ?>
                         </p>
                         <p style="margin: 0; color: #666; font-size: 0.8em;">
-                            Emails de confirmação são enviados automaticamente para moradores com email cadastrado.
-                            <?php if (!$isConfigured): ?>
-                                <br><small>Para melhor confiabilidade, configure SMTP em php/email-config.php</small>
+                            Emails funcionam mesmo com servidores bloqueados!
+                            <?php if (!(PHP_OS_FAMILY === 'Windows' && class_exists('COM'))): ?>
+                                <br><small>Arquivos .eml serão criados para abertura no Outlook</small>
                             <?php endif; ?>
+                        </p>
+                        <p style="margin: 0.5rem 0 0 0;">
+                            <a href="../../php/outlook-test.php" target="_blank" style="color: #007bff; text-decoration: none;">
+                                🧪 Testar Sistema de Email
+                            </a>
                         </p>
                     </div>
                 </div>
@@ -292,6 +299,7 @@
                             <th>Morador</th>
                             <th>Email</th>
                             <th>Status</th>
+                            <th>Email</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -308,7 +316,7 @@
                         
                         if (mysqli_num_rows($proximas) > 0) {
                             while ($reserva = mysqli_fetch_array($proximas)) {
-                                $email_status = $reserva["email"] ? "✉️ Enviado" : "⚠️ Sem email";
+                                $email_status = $reserva["email"] ? "✉️ Disponível" : "⚠️ Sem email";
                                 $email_class = $reserva["email"] ? "status-ativo" : "status-presente";
                                 
                                 echo "<tr>";
@@ -317,12 +325,12 @@
                                 echo "<td>" . $reserva["horario"] . "</td>";
                                 echo "<td>" . $reserva["tempo_duracao"] . "</td>";
                                 echo "<td>" . $reserva["nome_morador"] . " - Bloco " . $reserva["bloco"] . "/" . $reserva["torre"] . "</td>";
-                                echo "<td><span class='$email_class'>$email_status</span></td>";
                                 echo "<td><span class='status-ativo'>Confirmada</span></td>";
+                                echo "<td><span class='$email_class'>$email_status</span></td>";
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='7' style='text-align: center;'>Nenhuma reserva encontrada</td></tr>";
+                            echo "<tr><td colspan='8' style='text-align: center;'>Nenhuma reserva encontrada</td></tr>";
                         }
                         ?>
                     </tbody>
