@@ -22,6 +22,7 @@
                 <li><a href="pages/visitantes/visitantes.php"><i class="fas fa-user-friends"></i> Visitantes</a></li>
                 <li><a href="pages/relatorios/relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
                 <li><a href="pages/reservas/reservas.php"><i class="fas fa-calendar"></i> Reservas</a></li>
+                <li><a href="pages/encomendas/cadastro_encomendas.php"><i class="fas fa-box"></i> Encomendas</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn"><i class="fas fa-gear"></i> Cadastros</a>
                     <div class="dropdown-content">

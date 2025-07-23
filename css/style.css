@@ -651,6 +651,37 @@ input, select, textarea {
     font-size: 0.875rem;
 }
 
+/* Input sem ícone */
+input.no-icon, select.no-icon, textarea.no-icon {
+    padding-left: 0.75rem;
+}
+
+/* Destacar texto pesquisado */
+mark {
+    background-color: #ffeb3b;
+    color: #333;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.2rem;
+}
+
+/* Resultado da pesquisa */
+#resultado-pesquisa {
+    padding: 0.5rem;
+    background-color: var(--background-color);
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Fix para input de pesquisa sem ícone sobreposto */
+#pesquisa {
+    padding: 0.8rem;
+    padding-left: 0.8rem !important;
+}
+
+/* Container de input sem ícone */
+.form-group input:not(.input-container input) {
+    padding-left: 0.8rem;
+}
 input:focus, select:focus, textarea:focus {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
@@ -771,7 +802,7 @@ button:hover, .btn-primary:hover, .btn-secondary:hover, .btn-success:hover, .btn
 /* Cards de Funcionários */
 .cards-funcionarios {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 2fr 2fr;
     gap: 1.5rem;
     margin-top: 1rem;
 }
@@ -1014,40 +1045,6 @@ footer {
     }
 }
 
-/* Animação para formulários expansíveis */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Estilos para seções de formulário expansível */
-#animal-form, #veiculo-form {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-#animal-form h4, #veiculo-form h4 {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-}
-
-#animal-form h4 i, #veiculo-form h4 i {
-    font-size: 1.3rem;
-}
-
 .card, .lista-item, .form-section, .quick-access-card {
     animation: fadeIn 0.5s ease-out;
 }
@@ -1207,4 +1204,42 @@ input:invalid:focus {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+}
+
+/* Animal form section styling */
+#animal-form-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e9ecef;
+    margin-top: 1rem;
+}
+
+#animal-form-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#animal-form-section h4 i {
+    color: var(--accent-color);
+}
+
+/* Animation for animal form */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
